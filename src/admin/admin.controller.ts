@@ -239,4 +239,99 @@ export class AdminController{
             return result;
         }   
     }
+
+    @Get('ops/sort/inf/:amount')
+    async opsInfoSortByAmountInf(
+        @Param('amount') amount : number,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || amount === undefined || amount <= 0){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsSortByAmountInfTo(id, token, amount);
+            return result;
+        }   
+    }
+
+    @Get('ops/sort/infoe/:amount')
+    async opsInfoSortByAmountInfOrEqual(
+        @Param('amount') amount : number,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || amount === undefined || amount <= 0){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsSortByAmountInfOrEqualTo(id, token, amount);
+            return result;
+        }   
+    }
+
+    @Get('ops/sort/sup/:amount')
+    async opsInfoSortByAmountSup(
+        @Param('amount') amount : number,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || amount === undefined || amount <= 0){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsSortByAmountSupTo(id, token, amount);
+            return result;
+        }   
+    }
+
+    @Get('ops/sort/supoe/:amount')
+    async opsInfoSortByAmountSupOrEqual(
+        @Param('amount') amount : number,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || amount === undefined || amount <= 0){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsSortByAmountSupOrEqualTo(id, token, amount);
+            return result;
+        }   
+    }
+
+    @Get('ops/sort/eq/:amount')
+    async opsInfoSortByAmountEqual(
+        @Param('amount') amount : number,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || amount === undefined || amount <= 0){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsSortByAmountEqualTo(id, token, amount);
+            return result;
+        }   
+    }
 }
