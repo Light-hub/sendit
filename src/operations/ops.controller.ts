@@ -17,5 +17,4 @@ export class OpsController{
         const result = await this.opsService.insertNewOp(receiver,head.id,head.token,amount);
         return result;
     }
-
 }

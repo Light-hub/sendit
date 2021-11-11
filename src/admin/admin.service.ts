@@ -103,6 +103,90 @@ export class AdminService{
         }
     }
 
+    async changePassword(hid : string, htoken : string, newPass : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.userService.changePassword(hid, htoken, newPass);
+            return res;
+        }
+    }
+
+    async changePhone(hid : string, htoken : string, newTel : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.userService.changePhone(hid, htoken, newTel);
+            return res;
+        }
+    }
+
+    async changeEmail(hid : string, htoken : string, newEmail : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.userService.changeEmail(hid, htoken, newEmail);
+            return res;
+        }
+    }
+
+    async changeName(hid : string, htoken : string, newName : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.userService.changeName(hid, htoken, newName);
+            return res;
+        }
+    }
+
+    async changeFirstname(hid : string, htoken : string, newFName : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.userService.changeFirstname(hid, htoken, newFName);
+            return res;
+        }
+    }
+
+    async activeAccount(tel : string, validationToken : string){
+        const result = await this.userService.activeAccount(tel, validationToken);
+
+        return result;
+    }
+
+    async deactiveAccount(hid : string, htoken : string, huid : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.userService.desactiveAccount(huid);
+            return res;
+        }
+    }
+
     async getAllOps(hid : string, htoken : string){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
@@ -207,7 +291,7 @@ export class AdminService{
         }
     }
 
-    async changePassword(hid : string, htoken : string, newPass : string){
+    async getOpsSortByAmountInfTo(hid : string, htoken : string, amount : number){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -215,12 +299,12 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.userService.changePassword(hid, htoken, newPass);
+            const res = await this.opsService.getOpsSortByAmountInfTo(amount);
             return res;
-        }
+        } 
     }
 
-    async changePhone(hid : string, htoken : string, newTel : string){
+    async getOpsSortByAmountInfOrEqualTo(hid : string, htoken : string, amount : number){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -228,12 +312,12 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.userService.changePhone(hid, htoken, newTel);
+            const res = await this.opsService.getOpsSortByAmountInfOrEqualTo(amount);
             return res;
-        }
+        } 
     }
 
-    async changeEmail(hid : string, htoken : string, newEmail : string){
+    async getOpsSortByAmountSupTo(hid : string, htoken : string, amount : number){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -241,12 +325,12 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.userService.changeEmail(hid, htoken, newEmail);
+            const res = await this.opsService.getOpsSortByAmountSupTo(amount);
             return res;
-        }
+        } 
     }
 
-    async changeName(hid : string, htoken : string, newName : string){
+    async getOpsSortByAmountSupOrEqualTo(hid : string, htoken : string, amount : number){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -254,12 +338,12 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.userService.changeName(hid, htoken, newName);
+            const res = await this.opsService.getOpsSortByAmountSupOrEqualTo(amount);
             return res;
-        }
+        } 
     }
 
-    async changeFirstname(hid : string, htoken : string, newFName : string){
+    async getOpsSortByAmountEqualTo(hid : string, htoken : string, amount : number){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -267,28 +351,9 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.userService.changeFirstname(hid, htoken, newFName);
+            const res = await this.opsService.getOpsSortByAmountEqualTo(amount);
             return res;
-        }
-    }
-
-    async activeAccount(tel : string, validationToken : string){
-        const result = await this.userService.activeAccount(tel, validationToken);
-
-        return result;
-    }
-
-    async deactiveAccount(hid : string, htoken : string, huid : string){
-        const result = await this.hasAdminPriv(hid, htoken);
-        if(result.state === false){
-            return ({
-                'message' : 'Impossible de faire cette action',
-                'state' : false
-            })
-        }else{
-            const res = await this.userService.desactiveAccount(huid);
-            return res;
-        }
+        } 
     }
 
 }
