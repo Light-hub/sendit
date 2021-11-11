@@ -205,5 +205,100 @@ export class OpsService{
         }
     }
 
+    async getOpsSortByAmountInfTo(amount : number){
+        const opsList = await this.opsModel.find().where('amount').lt(amount);
+
+        if(opsList.length === 0){
+            return ({
+                'message' : 'Aucune transaction ne correspond à ce critère',
+                'state' : false
+            })
+        }else{
+            return opsList.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            })); 
+        }
+    }
+
+    async getOpsSortByAmountInfOrEqualTo(amount : number){
+        const opsList = await this.opsModel.find().where('amount').lte(amount);
+
+        if(opsList.length === 0){
+            return ({
+                'message' : 'Aucune transaction ne correspond à ce critère',
+                'state' : false
+            })
+        }else{
+            return opsList.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            })); 
+        }
+    }
+
+    async getOpsSortByAmountSupTo(amount : number){
+        const opsList = await this.opsModel.find().where('amount').gt(amount);
+
+        if(opsList.length === 0){
+            return ({
+                'message' : 'Aucune transaction ne correspond à ce critère',
+                'state' : false
+            })
+        }else{
+            return opsList.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            })); 
+        }
+    }
+
+    async getOpsSortByAmountSupOrEqualTo(amount : number){
+        const opsList = await this.opsModel.find().where('amount').gte(amount);
+
+        if(opsList.length === 0){
+            return ({
+                'message' : 'Aucune transaction ne correspond à ce critère',
+                'state' : false
+            })
+        }else{
+            return opsList.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            })); 
+        }
+    }
+
+    async getOpsSortByAmountEqualTo(amount : number){
+        const opsList = await this.opsModel.find().where('amount').equals(amount);
+
+        if(opsList.length === 0){
+            return ({
+                'message' : 'Aucune transaction ne correspond à ce critère',
+                'state' : false
+            })
+        }else{
+            return opsList.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            })); 
+        }
+    }
+
     
 }
