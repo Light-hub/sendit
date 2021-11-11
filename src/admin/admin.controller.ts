@@ -182,4 +182,61 @@ export class AdminController{
             return result;
         }   
     }
+
+    @Get('ops/is/:id')
+    async opsInfoSentById(
+        @Param('id') sid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || sid === undefined || sid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsSentById(id, token, sid);
+            return result;
+        }   
+    }
+
+    @Get('ops/ir/:id')
+    async opsInfoReceivedById(
+        @Param('id') rid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || rid === undefined || rid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsReceivedById(id, token, rid);
+            return result;
+        }   
+    }
+
+    @Get('ops/i/:id')
+    async opsInfoInvolvedById(
+        @Param('id') uid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || uid === undefined || uid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getOpsInvolvedById(id, token, uid);
+            return result;
+        }   
+    }
 }

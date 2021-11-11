@@ -1,6 +1,4 @@
 import { Headers, Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
 import { OpsService } from "src/operations/ops.services";
 import { UserService } from "src/users/user.services";
 
