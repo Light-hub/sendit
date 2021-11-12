@@ -26,21 +26,46 @@ export class OpsService{
                     'state' : false
                 });
             }else{
+                const date = new Date();
                 const newOp = new this.opsModel({
                     amount : amount,
                     sender : sender.Téléphone,
                     receiver : htelR,
                     senderId : hids,
                     receiverId : receiver.id,
-                    date : new Date() 
+                    state : false,
+                    date : date
                 });
                 await newOp.save();
-                await this.userService.debiter(sender.Id,amount,htoken);
-                await this.userService.crediter(sender.Id,receiver.id,amount,htoken)
-                return ({
-                    'message' : 'DOne',
-                    'state' : true
-                });
+                const cond1 = await this.userService.debiter(sender.Id,amount,htoken);
+                if(cond1.state){
+                    const cond2 = await this.userService.crediter(sender.Id,receiver.id,amount,htoken);
+                    if(!cond2.state){
+                        const cond3 = await this.userService.rembourser(sender.Id,amount,htoken);
+                        return ({
+                            'message' : 'Opération non aboutie, veuillez reessayer',
+                            'state' : false
+                        });
+                    }else{
+                        const pendingOp = await this.opsModel.findOneAndUpdate({
+                            receiver : htelR,
+                            sender : sender.Téléphone,
+                            state : false,
+                            date : date
+                        }, {
+                            state : true
+                        });
+                        return ({
+                            'message' : 'Opération réussie',
+                            'state' : true
+                        });
+                    }
+                }else{
+                    return ({
+                        'message' : 'Opération non aboutie, veuillez reessayer',
+                        'state' : false
+                    });
+                }
             }
         }else{
             return({

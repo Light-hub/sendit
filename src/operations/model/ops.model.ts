@@ -6,6 +6,7 @@ export const OpsSchema = new mongoose.Schema({
     senderId : {type : String, required : true},
     receiver : {type : String, required : true},
     receiverId : {type : String, required : true},
+    state : {type : Boolean, required : true},
     date : {type : Date, required : true},
 })
 
@@ -16,5 +17,6 @@ export interface Operation{
     senderId : string,
     receiver : string,
     receiverId : string,
+    state : boolean,
     date : Date
 }

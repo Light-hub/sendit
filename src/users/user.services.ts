@@ -436,4 +436,26 @@ export class UserService{
         }
     }
 
+    async rembourser(hids : string, amount : number, htoken : string){
+        const authorization = await this.isAuthorized(hids, htoken);
+        if(authorization.state){
+            const receiver = await this.findUserMainInfo(hids); 
+            const balance = receiver.Solde + amount;
+
+            await this.userModel.findByIdAndUpdate(hids, {
+                    balance : balance
+            });
+
+            return ({
+                    'message' : 'Crédit effectué',
+                    'state' : true
+            });
+        }else{
+            return({
+                'message' : 'Aucune chance!!!',
+                'state' : false
+            });
+        }
+    }
+
 }
