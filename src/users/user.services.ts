@@ -239,6 +239,61 @@ export class UserService{
         }
     }
 
+    async findUserMainInfoByName(hname : string){
+        const userList = await this.userModel.find({
+            name : hname
+        });
+        if(userList === undefined || userList.length === 0){
+            return ({
+                'message' : 'Not found',
+                'state' : false,
+                'id' : undefined
+            })
+        }else{
+            return userList.map(user => ({
+                Id : user.id,
+                Nom : user.name,
+                Prenom : user.firstName,
+                Téléphone : user.phone,
+                Email : user.email,
+                Solde : user.balance
+            }))
+        }
+    }
+
+    async findUserMainInfoByFirstName(fname : string){
+        const user = await this.userModel.find({
+            firstName : fname
+        }).exec();
+        if(user === undefined || user.length === 0){
+            return ({
+                'message' : 'Not found',
+                'state' : false,
+                'id' : undefined
+            })
+        }else{
+
+            return user;
+        }
+    }
+
+    async findUserMainInfoByFirstNameAndName(fname : string, name  : string){
+        const user = await this.userModel.find({
+            firstName : fname,
+            name : name
+        }).exec();
+        if(user === undefined || user.length === 0){
+            return ({
+                'message' : 'Not found',
+                'state' : false,
+                'id' : undefined
+            })
+        }else{
+
+            return user;
+        }
+    }
+
     async changePassword(hid : string, htoken : string, newPass : string){
         const result = await this.isAuthorized(hid, htoken);
         if(result.code === false){

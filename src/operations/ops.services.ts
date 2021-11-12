@@ -93,7 +93,215 @@ export class OpsService{
         }));
     }
 
-    async getOps(id : string){
+    async getPendingOps(){
+        const result = await this.opsModel.find({
+            state : false
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction non aboutie',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getTerminatedOps(){
+        const result = await this.opsModel.find({
+            state : true
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction non aboutie',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getPendingOpsSentById(sid : string){
+        const result = await this.opsModel.find({
+            senderId : sid,
+            state : false
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction non aboutie',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getPendingOpsReceivedById(rid : string){
+        const result = await this.opsModel.find({
+            receiverId : rid,
+            state : false
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction non aboutie',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getTerminatedOpsSentById(sid : string){
+        const result = await this.opsModel.find({
+            senderId : sid,
+            state : true
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction effectuée',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getTerminatedOpsReceivedById(rid : string){
+        const result = await this.opsModel.find({
+            receiverId : rid,
+            state : true
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction reçue',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getPendingOpsSentByTel(stel : string){
+        const result = await this.opsModel.find({
+            sender : stel,
+            state : false
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction non aboutie',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getPendingOpsReceivedByTel(rtel : string){
+        const result = await this.opsModel.find({
+            receiver : rtel,
+            state : false
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction non aboutie',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getTerminatedOpsReceivedByTel(rtel : string){
+        const result = await this.opsModel.find({
+            receiverId : rtel,
+            state : true
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction reçue',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getTerminatedOpsSentByTel(stel : string){
+        const result = await this.opsModel.find({
+            sender : stel,
+            state : true
+        }).exec();
+        if(result === undefined || result.length === 0){
+            return ({
+                'message' : 'Aucune transaction effectuée',
+                'state' : false
+            });
+        }else{
+            return result.map(ops =>({
+                Id : ops.id,
+                Sender : ops.sender,
+                Receiver : ops.receiver,
+                Amount : ops.amount,
+                Date : ops.date
+            }));
+        }
+    }
+
+    async getOpsById(id : string){
         const op = await this.opsModel.findById(id).exec();
 
         if(op === null){
@@ -324,6 +532,7 @@ export class OpsService{
             })); 
         }
     }
+
 
     
 }

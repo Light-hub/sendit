@@ -8,6 +8,8 @@ export class AdminController{
     constructor(
         private readonly adminService : AdminService){
     }
+///////////////////////////////////////////////
+//////////////////////////
 
     @Post('log-in')
     async login(
@@ -91,6 +93,203 @@ export class AdminController{
             }     
     }
 
+//////////////////////////
+///////////////////////////////////////////////
+
+///////////////////////////////////////////////
+//////////////////////////
+
+    @Get('ops/done')
+    async getDoneOps(@Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined){
+            return ({
+                'message' : 'lack of privileges',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getTerminatedOps(id, token);
+            return result;
+        }   
+    }
+
+    @Get('ops/done/sent/:id')
+    async opsTermSentById(
+        @Param('id') sid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || sid === undefined || sid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getTerminatedOpsSentById(id, token, sid);
+            return result;
+        }   
+    }
+
+    @Get('ops/done/received/:id')
+    async opsTermReceivedById(
+        @Param('id') rid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || rid === undefined || rid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getTerminatedOpsReceivedById(id, token, rid);
+            return result;
+        }   
+    }
+
+    @Get('ops/done/received/t/:tel')
+    async opsTermReceivedByTel(
+        @Param('tel') rtel : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || rtel === undefined || rtel.length < 10 || rtel.length > 14){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getTerminatedOpsReceivedByTel(id, token, rtel);
+            return result;
+        }   
+    }
+
+    @Get('ops/done/sent/t/:tel')
+    async opsTermSentByTel(
+        @Param('tel') stel : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || stel === undefined || stel.length < 10 || stel.length > 14){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getTerminatedOpsSentByTel(id, token, stel);
+            return result;
+        }   
+    }
+
+/////////////////////////
+////////////////////////
+
+    @Get('ops/pending')
+    async getPendingOps(@Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined){
+            return ({
+                'message' : 'lack of privileges',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getPendingOps(id, token);
+            return result;
+        }   
+    }
+
+    @Get('ops/pending/sent/:id')
+    async opsPendingSentById(
+        @Param('id') sid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || sid === undefined || sid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getPendingOpsSentById(id, token, sid);
+            return result;
+        }   
+    }
+
+    @Get('ops/pending/received/:id')
+    async opsPendingReceivedById(
+        @Param('id') rid : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || rid === undefined || rid.length !== 24){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getPendingOpsReceivedById(id, token, rid);
+            return result;
+        }   
+    }
+
+    @Get('ops/pending/sent/t/:tel')
+    async opsPendingSentByTel(
+        @Param('tel') stel : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || stel === undefined || stel.length < 10 || stel.length > 14){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getPendingOpsSentByTel(id, token, stel);
+            return result;
+        }   
+    }
+
+    @Get('ops/pending/received/t/:tel')
+    async opsPendingReceivedByTel(
+        @Param('tel') rtel : string,
+        @Headers() head){
+        const id = head.id;
+        const token = head.token;
+
+        if(id === undefined || token === undefined 
+            || rtel === undefined || rtel.length < 10 || rtel.length > 14){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }else{
+            const result = await this.adminService.getPendingOpsReceivedByTel(id, token, rtel);
+            return result;
+        }   
+    }
+
+
+/////////////////////////
+////////////////////////
+
     @Get('ops')
     async opsInfo(@Headers() head){
         const id = head.id;
@@ -121,7 +320,7 @@ export class AdminController{
                 'code' : false
             })
         }else{
-            const result = await this.adminService.getOps(id, token, hid);
+            const result = await this.adminService.getOpsById(id, token, hid);
             return result;
         }   
     }
@@ -240,6 +439,9 @@ export class AdminController{
         }   
     }
 
+/////////////////////////
+/////////////////////////
+
     @Get('ops/sort/inf/:amount')
     async opsInfoSortByAmountInf(
         @Param('amount') amount : number,
@@ -334,4 +536,8 @@ export class AdminController{
             return result;
         }   
     }
+
+/////////////////////////
+/////////////////////////////////////////////////////////////
+
 }

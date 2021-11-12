@@ -103,6 +103,45 @@ export class AdminService{
         }
     }
 
+    async findUserMainInfoByName(hid : string, htoken : string, sname : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const userList = await this.userService.findUserMainInfoByName(sname);
+            return userList;
+        } 
+    }
+
+    async findUserMainInfoByFirstName(hid : string, htoken : string, sname : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const userList = await this.userService.findUserMainInfoByFirstName(sname);
+            return userList;
+        } 
+    }
+
+    async findUserMainInfoByFirstNameAndName(hid : string, htoken : string, sname : string, sfname : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const userList = await this.userService.findUserMainInfoByFirstNameAndName(sfname, sname);
+            return userList;
+        } 
+    }
+
     async changePassword(hid : string, htoken : string, newPass : string){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
@@ -200,7 +239,7 @@ export class AdminService{
         }
     }
 
-    async getOps(hid : string, htoken : string, oid : string){
+    async getOpsById(hid : string, htoken : string, oid : string){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -208,7 +247,7 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.opsService.getOps(oid);
+            const res = await this.opsService.getOpsById(oid);
             return res;
         }
     }
@@ -352,6 +391,136 @@ export class AdminService{
             })
         }else{
             const res = await this.opsService.getOpsSortByAmountEqualTo(amount);
+            return res;
+        } 
+    }
+
+    async getPendingOps(hid : string, htoken : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getPendingOps();
+            return res;
+        } 
+    }
+    
+    async getTerminatedOps(hid : string, htoken : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getTerminatedOps();
+            return res;
+        } 
+    }
+
+    async getPendingOpsSentById(hid : string, htoken : string, uid : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getPendingOpsSentById(uid);
+            return res;
+        } 
+    }
+
+    async getPendingOpsReceivedById(hid : string, htoken : string, uid : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getPendingOpsReceivedById(uid);
+            return res;
+        } 
+    }
+
+    async getTerminatedOpsReceivedById(hid : string, htoken : string, uid : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getTerminatedOpsReceivedById(uid);
+            return res;
+        } 
+    }
+
+    async getTerminatedOpsSentById(hid : string, htoken : string, uid : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getTerminatedOpsSentById(uid);
+            return res;
+        } 
+    }
+
+    async getPendingOpsSentByTel(hid : string, htoken : string, stel : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getPendingOpsSentByTel(stel);
+            return res;
+        } 
+    }
+
+    async getPendingOpsReceivedByTel(hid : string, htoken : string, stel : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getPendingOpsReceivedByTel(stel);
+            return res;
+        } 
+    }
+
+    async getTerminatedOpsReceivedByTel(hid : string, htoken : string, rtel : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getTerminatedOpsReceivedByTel(rtel);
+            return res;
+        } 
+    }
+
+    async getTerminatedOpsSentByTel(hid : string, htoken : string, rtel : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(result.state === false){
+            return ({
+                'message' : 'Impossible de faire cette action',
+                'state' : false
+            })
+        }else{
+            const res = await this.opsService.getTerminatedOpsSentByTel(rtel);
             return res;
         } 
     }
