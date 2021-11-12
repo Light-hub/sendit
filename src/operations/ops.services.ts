@@ -47,7 +47,7 @@ export class OpsService{
                             'state' : false
                         });
                     }else{
-                        const pendingOp = await this.opsModel.findOneAndUpdate({
+                        const updatePendingOp = await this.opsModel.findOneAndUpdate({
                             receiver : htelR,
                             sender : sender.Téléphone,
                             state : false,
