@@ -14,6 +14,14 @@ export class UsersController {
         @Body('email') email : string
         )
     {
+        if(name === undefined || firstName === undefined 
+            || password === undefined || phone === undefined
+            || email === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.insertUser(name, firstName, password,phone,email);
     }
 
@@ -22,6 +30,12 @@ export class UsersController {
         @Body('email') email : string,
         @Body('password') password : string
     ){
+        if(email === undefined || password === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.authenticate(email,password);
     }
 
