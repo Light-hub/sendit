@@ -5,6 +5,8 @@ import { UserService } from './user.services';
 export class UsersController {
     constructor(private readonly userService : UserService){}
 
+////////////////////////////////
+//////////////
     @Post('register')
     async registerUser(
         @Body('nom') name : string, 
@@ -53,7 +55,10 @@ export class UsersController {
         }
         return await this.userService.logout(id, token);
     }
-
+//////////////
+///////////////////////////////
+////////////////////////////////
+//////////////
     @Post('modpas')
     async modifyPassword(
         @Headers() header,
@@ -134,7 +139,6 @@ export class UsersController {
         return await this.userService.changePhone(id, token, newTel);
     }
 
-
     @Post('activate')
     async activeAccount(
         @Body('tel') hphone : string,
@@ -150,7 +154,8 @@ export class UsersController {
         }
         return await this.userService.activeAccount(phone, token);
     }
-
+//////////////
+///////////////////////////////
     @Get()
     async find() {
        const list = await this.userService.getUsers();
