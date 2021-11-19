@@ -31,6 +31,12 @@ export class UsersController {
     ){
         const id = header.id;
         const token = header.token;
+        if(id === undefined || token === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.logout(id, token);
     }
 
@@ -41,6 +47,12 @@ export class UsersController {
     ){
         const id = header.id;
         const token = header.token;
+        if(id === undefined || token === undefined || password === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.changePassword(id, token, password);
     }
 
@@ -51,6 +63,12 @@ export class UsersController {
     ){
         const id = header.id;
         const token = header.token;
+        if(id === undefined || token === undefined || newName === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.changeName(id, token,newName);
     }
 
@@ -61,6 +79,12 @@ export class UsersController {
     ){
         const id = header.id;
         const token = header.token;
+        if(id === undefined || token === undefined || newFName === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.changeFirstname(id, token,newFName);
     }
 
@@ -71,6 +95,12 @@ export class UsersController {
     ){
         const id = header.id;
         const token = header.token;
+        if(id === undefined || token === undefined || newMail === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.changeEmail(id, token, newMail);
     }
 
@@ -81,6 +111,12 @@ export class UsersController {
     ){
         const id = header.id;
         const token = header.token;
+        if(id === undefined || token === undefined || newTel === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.changePhone(id, token, newTel);
     }
 
@@ -92,6 +128,12 @@ export class UsersController {
     ){
         const phone = hphone;
         const token = htoken;
+        if(phone === undefined || token === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
         return await this.userService.activeAccount(phone, token);
     }
 
