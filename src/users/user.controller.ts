@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Headers, Param, Header } from '@nestjs/common';
 import { UserService } from './user.services';
+import { userLogin, userRegistration } from './usersModel/userDTO';
 
 @Controller('users')
 export class UsersController {
@@ -9,36 +10,18 @@ export class UsersController {
 //////////////
     @Post('register')
     async registerUser(
-        @Body('nom') name : string, 
-        @Body('prenom') firstName : string, 
-        @Body('password') password : string,
-        @Body('phone') phone : string,
-        @Body('email') email : string
+        @Body() user : userRegistration
         )
     {
-        if(name === undefined || firstName === undefined 
-            || password === undefined || phone === undefined
-            || email === undefined){
-            return ({
-                'message' : 'lack of privileges or invalid parameter',
-                'code' : false
-            })
-        }
-        return await this.userService.insertUser(name, firstName, password,phone,email);
+        return await this.userService.insertUser(user.name, user.firstName, user.password, user.phone, user.email);
     }
 
     @Post('log-in')
     async login(
-        @Body('email') email : string,
-        @Body('password') password : string
+        
+        @Body() user : userLogin
     ){
-        if(email === undefined || password === undefined){
-            return ({
-                'message' : 'lack of privileges or invalid parameter',
-                'code' : false
-            })
-        }
-        return await this.userService.authenticate(email,password);
+        return await this.userService.authenticate(user.email,user.password);
     }
 
     @Post('log-out')

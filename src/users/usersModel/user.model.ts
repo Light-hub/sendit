@@ -14,18 +14,18 @@ export const UserSchema = new mongoose.Schema({
     token : {type : String, required : true},
 })
 
-export interface User {
-    id : string,
-    name : string,
-    firstName : string,
-    active : boolean,
-    password : string,
-    balance : number,
-    phone : string,
-    email : string,
-    connected : boolean,
-    admin : boolean,
-    validationToken : string,
+export class User {
+    id : string;
+    name : string;
+    firstName : string;
+    active : boolean;
+    password : string;
+    balance : number;
+    phone : string;
+    email : string;
+    connected : boolean;
+    admin : boolean;
+    validationToken : string;
     token : string
    
 }

@@ -14,22 +14,28 @@ export class UserService{
 
     async insertUser(hname : string, hfirstName : string, hpassword : string, hphone : string, hemail : string){
         const md5 = require('md5');
-        const newUser = new this.userModel({
-            name:  hname,
-            firstName: hfirstName,
-            password: hpassword,
-            active: false,
-            phone: hphone,
-            email: hemail,
-            connected: false,
-            admin : false,
-            token: 'ras',
-            validationToken : md5(hphone),
-            balance: 0,
-        })    
-       const result = await newUser.save();
-       console.log(result);
-       return newUser;
+        const result0 = await this.isAlreadyUser(hphone);
+        if(!result0.state){
+            const newUser = new this.userModel({
+                name:  hname,
+                firstName: hfirstName,
+                password: hpassword,
+                active: false,
+                phone: hphone,
+                email: hemail,
+                connected: false,
+                admin : false,
+                token: 'ras',
+                validationToken : md5(hphone),
+                balance: 0,
+            })    
+           const result = await newUser.save();
+           console.log(result);
+           return newUser;
+        }else{
+            return result0;
+        }
+        
     }
 
     async insertAdminUser(hname : string, hfirstName : string, hpassword : string, hphone : string, hemail : string){
@@ -52,6 +58,26 @@ export class UserService{
        return newUser;
     }
     
+    async isAlreadyUser(hphone : string){
+        const result =  await this.userModel.find({
+            phone : hphone
+        });
+
+        if(result === undefined || result.length === 0){
+            return({
+                'message' : 'Go ahead! ESTIAM☻',
+                'state' : false
+            });
+        }else{
+            return({
+                'message' : 'Account already registered',
+                'state' : true
+            });
+        }
+
+
+    }
+
     async isAuthorized(pid : string, ptoken : string){
         const result =  await this.userModel.find({
             id : pid,
