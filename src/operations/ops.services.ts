@@ -14,8 +14,9 @@ export class OpsService{
     
     async insertNewOp(htelR : string, hids : string, htoken : string, amount : number){
         const authorization = await this.userService.isAuthorized(hids, htoken);
-
-        if(authorization.state){
+        const authorization1 = await this.userService.isAdmin(hids, htoken);
+        
+        if(authorization.state && !authorization1.code){
             const receiver = await this.userService.findUserMainInfoByTel(htelR);
             const sender = await this.userService.findUserMainInfo(hids);
 

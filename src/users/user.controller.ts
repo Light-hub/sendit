@@ -20,7 +20,7 @@ export class UsersController {
     async login(
         @Body() user : userLoginDTO
     ){
-        return await this.userService.authenticate(user.email,user.password);
+        return await this.userService.authenticate(user.email, user.password, false);
     }
 
     @Post('log-out')
@@ -35,7 +35,7 @@ export class UsersController {
                 'code' : false
             })
         }
-        return await this.userService.logout(id, token);
+        return await this.userService.logout(id, token, false);
     }
 //////////////
 ///////////////////////////////

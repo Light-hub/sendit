@@ -10,13 +10,13 @@ export class AdminService{
     }
 
     async authenticate(hemail : string, hpassword : string){
-        const result = await this.userService.authenticate(hemail,hpassword);
+        const result = await this.userService.authenticate(hemail,hpassword, true);
         if(result.found === false){
             return result;
         }else{
             const result1 = await this.userService.isAdmin(result.id, result.token);
             if(result1.code === false){
-                const result3 = await this.userService.logout(result.id, result.token);
+                const result3 = await this.userService.logout(result.id, result.token, true);
                 return ({
                     'message' : 'Privilège manquant',
                     'access' : 'denied',
@@ -31,6 +31,20 @@ export class AdminService{
                     'token' : token
                 });
             } 
+        }
+    }
+
+    async insertAdminUser(hname : string, hfirstName : string, hpassword : string, hphone : string, hemail : string, hid : string, htoken : string){
+        const result = await this.hasAdminPriv(hid, htoken);
+        if(!result.state){
+            return ({
+                'message' : 'Privilège manquant',
+                'access' : 'denied',
+                'state' : false
+            })
+        }else{
+            const result2 = await this.userService.insertAdminUser(hname, hfirstName, hpassword, hphone, hemail);
+            return result2;  
         }
     }
 
@@ -58,7 +72,7 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const result2 = await this.userService.logout(hid,htoken);
+            const result2 = await this.userService.logout(hid,htoken, true);
             return result2;  
         }
     }

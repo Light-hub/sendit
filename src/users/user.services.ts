@@ -128,8 +128,7 @@ export class UserService{
         const generatedToken = md5(chain);
 
         await this.userModel.findByIdAndUpdate(id,{
-            token : generatedToken,
-            connected : true
+            token : generatedToken
         });
 
         return generatedToken;
@@ -148,7 +147,7 @@ export class UserService{
         return generatedToken;
     }
 
-    async authenticate(hemail : string, hpassword : string){
+    async authenticate(hemail : string, hpassword : string, allowed : boolean){
         const result = await this.userModel.find(({
             email : hemail,
             password : hpassword
@@ -167,13 +166,23 @@ export class UserService{
             }else{
                 if(result[0].connected === false){
                     const token = await this.generateToken(result[0].id);
-
-                    return ({
-                        'message' : 'Connecté, veuillez à ne pas divulguer votre token, ni votre ID',
-                        'found' : true,
-                        'id' : result[0].id,
-                        'token' : token
-                    })
+                    const result1 = await this.isAdmin(result[0].id, token)
+                    if(result1.code && !allowed){
+                        return ({
+                            'message' : 'Erreur interne',
+                            'code' : false
+                        });
+                    }else{
+                        await this.userModel.findByIdAndUpdate(result[0].id,{
+                            connected : true
+                        });
+                        return ({
+                            'message' : 'Connecté, veuillez à ne pas divulguer votre token, ni votre ID',
+                            'found' : true,
+                            'id' : result[0].id,
+                            'token' : token
+                        })
+                    }  
                 }else{
                     return ({
                         'message' : 'Déjà connecté hein! Annnh!! Elekôno Fianfi',
@@ -184,9 +193,9 @@ export class UserService{
         } 
     }
 
-    async logout(hid : string, htoken : string){
+    async logout(hid : string, htoken : string, isAllowed : boolean){
         const result =  await this.isAuthorized(hid,htoken);
-
+        const admin = await this.isAdmin(hid, htoken)
         if(result.state === false){
             if(result.code === false) {
                 return ({
@@ -199,6 +208,11 @@ export class UserService{
                     'found' : false
                 })
             }
+        }else if (admin.code && !isAllowed){
+            return ({
+                'message' : 'Erreur Interne',
+                'found' : false
+            })
         }else{
             await this.userModel.findByIdAndUpdate(hid, {
                 token : 'RAS',

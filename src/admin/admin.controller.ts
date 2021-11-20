@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Headers, Param, Post } from "@nestjs/common";
+import { userLoginDTO, userRegistrationDTO } from "src/users/usersModel/userDTO";
 import { AdminService } from "./admin.service";
 
 
@@ -13,10 +14,20 @@ export class AdminController{
 
     @Post('log-in')
     async login(
-        @Body('email') email : string,
-        @Body('password') password : string
+        @Body() user : userLoginDTO
     ){
-        const result = await this.adminService.authenticate(email,password);
+        const result = await this.adminService.authenticate(user.email,user.password);
+        return result;
+    }
+
+    @Post('register')
+    async register(@Headers() head,
+                    @Body() user : userRegistrationDTO)
+    {
+        const id = head.id;
+        const token = head.token;
+
+        const result = await this.adminService.insertAdminUser(user.name, user.firstName, user.password, user.phone, user.email, id, token);
         return result;
     }
 
