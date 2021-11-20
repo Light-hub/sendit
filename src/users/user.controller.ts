@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Headers, Param, Header } from '@nestjs/common';
 import { UserService } from './user.services';
-import { userLogin, userRegistration } from './usersModel/userDTO';
+import { userLoginDTO, userRegistrationDTO } from './usersModel/userDTO';
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +10,7 @@ export class UsersController {
 //////////////
     @Post('register')
     async registerUser(
-        @Body() user : userRegistration
+        @Body() user : userRegistrationDTO
         )
     {
         return await this.userService.insertUser(user.name, user.firstName, user.password, user.phone, user.email);
@@ -18,8 +18,7 @@ export class UsersController {
 
     @Post('log-in')
     async login(
-        
-        @Body() user : userLogin
+        @Body() user : userLoginDTO
     ){
         return await this.userService.authenticate(user.email,user.password);
     }
