@@ -215,7 +215,7 @@ export class UserService{
             })
         }else{
             await this.userModel.findByIdAndUpdate(hid, {
-                token : 'RAS',
+                token : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
                 connected : false
             });
             return ({
