@@ -27,45 +27,52 @@ export class OpsService{
                     'state' : false
                 });
             }else{
-                const date = new Date();
-                const newOp = new this.opsModel({
-                    amount : amount,
-                    sender : sender.Téléphone,
-                    receiver : htelR,
-                    senderId : hids,
-                    receiverId : receiver.id,
-                    state : false,
-                    date : date
-                });
-                await newOp.save();
-                const cond1 = await this.userService.debiter(sender.Id,amount,htoken);
-                if(cond1.state){
-                    const cond2 = await this.userService.crediter(sender.Id,receiver.id,amount,htoken);
-                    if(!cond2.state){
-                        const cond3 = await this.userService.rembourser(sender.Id,amount,htoken);
-                        return ({
-                            'message' : 'Opération non aboutie, veuillez reessayer',
-                            'state' : false
-                        });
-                    }else{
-                        const updatePendingOp = await this.opsModel.findOneAndUpdate({
-                            receiver : htelR,
-                            sender : sender.Téléphone,
-                            state : false,
-                            date : date
-                        }, {
-                            state : true
-                        });
-                        return ({
-                            'message' : 'Opération réussie',
-                            'state' : true
-                        });
-                    }
+                if(receiver.id === sender.Id){
+                    return ({
+                        'message' : 'Boucle détectée, opération annulée',
+                        'state' : false
+                    });
                 }else{
-                        return ({
-                            'message' : 'Opération non aboutie, veuillez reessayer',
-                            'state' : false
-                        });
+                    const date = new Date();
+                    const newOp = new this.opsModel({
+                        amount : amount,
+                        sender : sender.Téléphone,
+                        receiver : htelR,
+                        senderId : hids,
+                        receiverId : receiver.id,
+                        state : false,
+                        date : date
+                    });
+                    await newOp.save();
+                    const cond1 = await this.userService.debiter(sender.Id,amount,htoken);
+                    if(cond1.state){
+                        const cond2 = await this.userService.crediter(sender.Id,receiver.id,amount,htoken);
+                        if(!cond2.state){
+                            const cond3 = await this.userService.rembourser(sender.Id,amount,htoken);
+                            return ({
+                                'message' : 'Opération non aboutie, veuillez reessayer',
+                                'state' : false
+                            });
+                        }else{
+                            await this.opsModel.findOneAndUpdate({
+                                receiver : htelR,
+                                sender : sender.Téléphone,
+                                state : false,
+                                date : date
+                            }, {
+                                state : true
+                            });
+                            return ({
+                                'message' : 'Opération réussie',
+                                'state' : true
+                            });
+                        }
+                    }else{
+                            return ({
+                                'message' : 'Opération non aboutie, veuillez reessayer',
+                                'state' : false
+                            });
+                    }
                 }
             }
         }else{
@@ -78,7 +85,9 @@ export class OpsService{
     }
 
     async getAllOps(){
-        const opsList = await this.opsModel.find().exec();
+        const opsList = await this.opsModel.find()
+                                            .sort({date: 'desc'})
+                                            .exec();
         return opsList;
     }
 
@@ -97,7 +106,9 @@ export class OpsService{
     async getPendingOps(){
         const result = await this.opsModel.find({
             state : false
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction non aboutie',
@@ -117,7 +128,9 @@ export class OpsService{
     async getTerminatedOps(){
         const result = await this.opsModel.find({
             state : true
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction non aboutie',
@@ -138,7 +151,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             senderId : sid,
             state : false
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction non aboutie',
@@ -159,7 +174,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             receiverId : rid,
             state : false
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction non aboutie',
@@ -180,7 +197,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             senderId : sid,
             state : true
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction effectuée',
@@ -201,7 +220,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             receiverId : rid,
             state : true
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction reçue',
@@ -222,7 +243,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             sender : stel,
             state : false
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction non aboutie',
@@ -243,7 +266,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             receiver : rtel,
             state : false
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction non aboutie',
@@ -264,7 +289,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             receiverId : rtel,
             state : true
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction reçue',
@@ -285,7 +312,9 @@ export class OpsService{
         const result = await this.opsModel.find({
             sender : stel,
             state : true
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
         if(result === undefined || result.length === 0){
             return ({
                 'message' : 'Aucune transaction effectuée',
@@ -303,7 +332,9 @@ export class OpsService{
     }
 
     async getOpsById(id : string){
-        const op = await this.opsModel.findById(id).exec();
+        const op = await this.opsModel.findById(id)
+        .sort({date: 'desc'})
+        .exec();
 
         if(op === null){
             return ({
@@ -318,7 +349,9 @@ export class OpsService{
     async getOpsSentById(sid : string){
         const opsList = await this.opsModel.find({
             senderId : sid
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
 
         if(opsList.length === 0){
             return ({
@@ -339,7 +372,9 @@ export class OpsService{
     async getOpsReceivedById(rid : string){
         const opsList = await this.opsModel.find({
             receiverId : rid
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
 
         if(opsList.length === 0){
             return ({
@@ -359,7 +394,9 @@ export class OpsService{
 
     async getOpsInvolvedById(id : string){
         const opsList = await this.opsModel.find()
-                            .or([{ receiverId: id }, { senderId: id }]);
+                            .sort({date: 'desc'})
+                            .or([{ receiverId: id }, { senderId: id }])
+                            ;
 
         if(opsList.length === 0){
             return ({
@@ -371,6 +408,7 @@ export class OpsService{
                 Id : ops.id,
                 Sender : ops.sender,
                 Receiver : ops.receiver,
+                Type : ops.receiverId === id ? 'Crédit' : 'Débit',
                 Amount : ops.amount,
                 Date : ops.date
             }));
@@ -380,7 +418,9 @@ export class OpsService{
     async getOpsSentByTel(stel : string){
         const opsList = await this.opsModel.find({
             sender : stel
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
 
         if(opsList.length === 0){
             return ({
@@ -401,7 +441,9 @@ export class OpsService{
     async getOpsReceivedByTel(rtel : string){
         const opsList = await this.opsModel.find({
             receiver : rtel
-        }).exec();
+        })
+        .sort({date: 'desc'})
+        .exec();
 
         if(opsList.length === 0){
             return ({
@@ -421,6 +463,7 @@ export class OpsService{
 
     async getOpsInvolvedByTel(tel : string){
         const opsList = await this.opsModel.find()
+                            .sort({date: 'desc'})
                             .or([{ receiver : tel }, { sender : tel }]);
 
         if(opsList.length === 0){
@@ -440,7 +483,9 @@ export class OpsService{
     }
 
     async getOpsSortByAmountInfTo(amount : number){
-        const opsList = await this.opsModel.find().where('amount').lt(amount);
+        const opsList = await this.opsModel.find()
+        .sort({date: 'desc'})
+        .where('amount').lt(amount);
 
         if(opsList.length === 0){
             return ({
@@ -459,7 +504,9 @@ export class OpsService{
     }
 
     async getOpsSortByAmountInfOrEqualTo(amount : number){
-        const opsList = await this.opsModel.find().where('amount').lte(amount);
+        const opsList = await this.opsModel.find()
+        .sort({date: 'desc'})
+        .where('amount').lte(amount);
 
         if(opsList.length === 0){
             return ({
@@ -478,7 +525,9 @@ export class OpsService{
     }
 
     async getOpsSortByAmountSupTo(amount : number){
-        const opsList = await this.opsModel.find().where('amount').gt(amount);
+        const opsList = await this.opsModel.find()
+        .sort({date: 'desc'})
+        .where('amount').gt(amount);
 
         if(opsList.length === 0){
             return ({
@@ -497,7 +546,9 @@ export class OpsService{
     }
 
     async getOpsSortByAmountSupOrEqualTo(amount : number){
-        const opsList = await this.opsModel.find().where('amount').gte(amount);
+        const opsList = await this.opsModel.find()
+        .sort({date: 'desc'})
+        .where('amount').gte(amount);
 
         if(opsList.length === 0){
             return ({
@@ -516,7 +567,9 @@ export class OpsService{
     }
 
     async getOpsSortByAmountEqualTo(amount : number){
-        const opsList = await this.opsModel.find().where('amount').equals(amount);
+        const opsList = await this.opsModel.find()
+        .sort({date: 'desc'})
+        .where('amount').equals(amount);
 
         if(opsList.length === 0){
             return ({

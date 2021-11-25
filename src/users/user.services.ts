@@ -19,7 +19,7 @@ export class UserService{
             const newUser = new this.userModel({
                 name:  hname,
                 firstName: hfirstName,
-                password: hpassword,
+                password: md5(hpassword),
                 active: false,
                 phone: hphone,
                 email: hemail,
@@ -85,24 +85,16 @@ export class UserService{
             connected : true,
             active : true
         });
-
-        if(!result){
+        if(result.length === 0){
             return ({
-                'code' : false,
+                'code' : true,
                 'state' : false
             })
         }else{
-            if(result.length === 0){
-                return ({
-                    'code' : true,
-                    'state' : false
+            return ({
+               'code' : true,
+                'state' : true
                 })
-            }else{
-                return ({
-                    'code' : true,
-                    'state' : true
-                })
-            }
         }
 
     }
@@ -148,9 +140,10 @@ export class UserService{
     }
 
     async authenticate(hemail : string, hpassword : string, allowed : boolean){
+        const md5 = require('md5');
         const result = await this.userModel.find(({
             email : hemail,
-            password : hpassword
+            password : md5(hpassword)
         }));
         if(!result){
             return ({
