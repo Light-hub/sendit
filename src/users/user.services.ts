@@ -157,31 +157,39 @@ export class UserService{
                     'found' : false
                 }) 
             }else{
-                if(result[0].connected === false){
-                    const token = await this.generateToken(result[0].id);
-                    const result1 = await this.isAdmin(result[0].id, token)
-                    if(result1.code && !allowed){
-                        return ({
-                            'message' : 'Erreur interne',
-                            'code' : false
-                        });
+                if(result[0].active){
+                    if(result[0].connected === false){
+                        const token = await this.generateToken(result[0].id);
+                        const result1 = await this.isAdmin(result[0].id, token)
+                        if(result1.code && !allowed){
+                            return ({
+                                'message' : 'Erreur interne',
+                                'code' : false
+                            });
+                        }else{
+                            await this.userModel.findByIdAndUpdate(result[0].id,{
+                                connected : true
+                            });
+                            return ({
+                                'message' : 'Connecté, veuillez à ne pas divulguer votre token, ni votre ID',
+                                'found' : true,
+                                'id' : result[0].id,
+                                'token' : token
+                            })
+                        }  
                     }else{
-                        await this.userModel.findByIdAndUpdate(result[0].id,{
-                            connected : true
-                        });
                         return ({
-                            'message' : 'Connecté, veuillez à ne pas divulguer votre token, ni votre ID',
-                            'found' : true,
-                            'id' : result[0].id,
-                            'token' : token
+                            'message' : 'Déjà connecté hein! Annnh!! Elekôno Fianfi',
+                            'found' : false
                         })
                     }  
                 }else{
                     return ({
-                        'message' : 'Déjà connecté hein! Annnh!! Elekôno Fianfi',
+                        'message' : 'Veuillez activer votre compte',
                         'found' : false
-                    })
-                }  
+                    }) 
+                }
+                
             }   
         } 
     }
@@ -254,6 +262,20 @@ export class UserService{
                };
         }
         
+    }
+
+    async findMyInfo(hId : string, hToken : string){
+        const auth = await this.isAuthorized(hId, hToken);
+
+        if(auth.state){
+            const result = await this.findUserMainInfo(hId);
+            return result;
+        }else{
+            return ({
+                'message' : 'lack of privileges',
+                'state' : false
+            });
+        }
     }
 
     async findUserMainInfoByTel(tel : string){

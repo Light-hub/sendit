@@ -139,14 +139,16 @@ export class UsersController {
 //////////////
 ///////////////////////////////
     @Get()
-    async find() {
-       const list = await this.userService.getUsers();
-       return list;
+    async myInfos(@Headers() head) {
+        if(head.id === undefined || head.token === undefined || head.id.length != 24 || head.token.length != 32){
+            return({
+                'message' : 'lack of privileges',
+                'state' : false
+            })
+        }else{
+            const list = await this.userService.findMyInfo(head.id, head.token);
+            return list;
+        }
     }
 
-    @Get('/:id')
-    async findById(@Param('id') id  : string) {
-       const user = await this.userService.findUserMainInfo(id);
-       return user;
-    }
 }
