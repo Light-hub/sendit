@@ -156,7 +156,7 @@ export class AdminService{
         } 
     }
 
-    async changePassword(hid : string, htoken : string, newPass : string){
+    async changePassword(hid : string, htoken : string, newPass : string, oldPass : string){
         const result = await this.hasAdminPriv(hid, htoken);
         if(result.state === false){
             return ({
@@ -164,7 +164,7 @@ export class AdminService{
                 'state' : false
             })
         }else{
-            const res = await this.userService.changePassword(hid, htoken, newPass);
+            const res = await this.userService.changePassword(hid, htoken, newPass,oldPass);
             return res;
         }
     }

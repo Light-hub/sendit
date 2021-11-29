@@ -26,7 +26,7 @@ export class UserService{
                 connected: false,
                 admin : false,
                 token: 'ras',
-                validationToken : md5(hphone),
+                validationToken : md5(hphone + 'client' + new Date() + randomBytes(50)),
                 balance: 0,
             })    
            const result = await newUser.save();
@@ -44,7 +44,7 @@ export class UserService{
             name:  hname,
             firstName: hfirstName,
             password: hpassword,
-            active: false,
+            active: true,
             phone: hphone,
             email: hemail,
             connected: false,
@@ -349,21 +349,31 @@ export class UserService{
         }
     }
 
-    async changePassword(hid : string, htoken : string, newPass : string){
+    async changePassword(hid : string, htoken : string, newPass : string, oldPass : string){
         const result = await this.isAuthorized(hid, htoken);
+        const md5 = require('md5')
         if(result.code === false){
             return ({
                 'message' : 'Impossible de faire cette action',
                 'state' : false
             })
         }else{
-            await this.userModel.findByIdAndUpdate(hid,{
-                password : newPass
-            });
-            return ({
-                'message' : 'success',
-                'state' : true
-            })
+            const result = await this.findUserInfo(hid)
+            if(result ===  undefined || result.password !== oldPass){
+                return({
+                    'message' : 'Action impossible',
+                    'state' : false
+                })
+            }else{
+                await this.userModel.findByIdAndUpdate(hid,{
+                    password : md5(newPass)
+                });
+                return ({
+                    'message' : 'success',
+                    'state' : true
+                })
+            }
+            
         }
     }
 

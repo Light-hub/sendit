@@ -44,7 +44,8 @@ export class UsersController {
     @Post('modpas')
     async modifyPassword(
         @Headers() header,
-        @Body('password') password : string
+        @Body('password') password : string,
+        @Body('oldPassword') oldPassword : string
     ){
         const id = header.id;
         const token = header.token;
@@ -54,13 +55,13 @@ export class UsersController {
                 'code' : false
             })
         }
-        return await this.userService.changePassword(id, token, password);
+        return await this.userService.changePassword(id, token, password, oldPassword);
     }
 
     @Post('modname')
     async modifyName(
         @Headers() header,
-        @Body('Name') newName : string
+        @Body('name') newName : string
     ){
         const id = header.id;
         const token = header.token;
