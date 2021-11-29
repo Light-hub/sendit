@@ -578,4 +578,13 @@ export class UserService{
         }
     }
 
+    async deleteAccount(hid : string, htoken : string){
+        const result = await this.isAuthorized(hid, htoken);
+
+        if(result.state){
+            return this.userModel.findByIdAndDelete(hid);
+        }else{
+            return result;
+        }
+    }
 }

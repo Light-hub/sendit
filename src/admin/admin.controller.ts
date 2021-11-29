@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Headers, Param, Post, Put } from "@nestjs/common";
 import { userLoginDTO, userRegistrationDTO } from "src/users/usersModel/userDTO";
 import { AdminService } from "./admin.service";
 
@@ -20,7 +20,7 @@ export class AdminController{
         return result;
     }
 
-    @Post('register')
+    @Put('register')
     async register(@Headers() head,
                     @Body() user : userRegistrationDTO)
     {

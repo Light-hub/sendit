@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Headers, Post } from "@nestjs/common";
+import { Body, Controller, Get, Header, Headers, Post, Put } from "@nestjs/common";
 import { UserService } from "src/users/user.services";
 import { OpsService } from "./ops.services";
 
@@ -10,7 +10,7 @@ export class OpsController{
         ){
     }
 
-    @Post('perform')
+    @Put('perform')
     async performOps(
         @Body('amount') amount : number,
         @Body('receiver') receiver : string,

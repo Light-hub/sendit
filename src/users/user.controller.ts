@@ -8,7 +8,7 @@ export class UsersController {
 
 ////////////////////////////////
 //////////////
-    @Post('register')
+    @Put('register')
     async registerUser(
         @Body() user : userRegistrationDTO
         )
@@ -136,6 +136,20 @@ export class UsersController {
             })
         }
         return await this.userService.activeAccount(phone, token);
+    }
+
+    @Delete('delete')
+    async deleteAccount(@Headers() head
+    ){
+        const id = head.id;
+        const token = head.token;
+        if(id === undefined || token === undefined){
+            return ({
+                'message' : 'lack of privileges or invalid parameter',
+                'code' : false
+            })
+        }
+        return await this.userService.deleteAccount(id, token);
     }
 //////////////
 ///////////////////////////////
